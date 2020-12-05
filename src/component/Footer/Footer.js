@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Container = styled.footer`
-  width: 100vw;
+  width: 100%;
   margin-top: 100px;
 `;
 

@@ -14,7 +14,7 @@ import reviewer_3 from '../../img/reviewer_3.webp';
 const Banner = styled.section`
   position: relative;
   display: flex;
-  width: 100vw;
+  width: 100%;
   height: 450px;
   justify-content: center;
   align-items: center;
