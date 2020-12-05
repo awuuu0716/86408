@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { device } from '../../constants/devices';
 import banner from '../../img/banner.webp';
 import menu_1 from '../../img/menu_1.webp';
 import menu_2 from '../../img/menu_2.webp';
@@ -19,7 +20,6 @@ const Banner = styled.section`
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 48px;
   font-weight: bold;
   background: url(${banner}) no-repeat center/cover;
 
@@ -35,6 +35,18 @@ const Banner = styled.section`
 
   h1 {
     z-index: 2;
+  }
+
+  @media ${device.mobileS} {
+    h1 {
+      font-size: 24px;
+    }
+  }
+
+  @media ${device.tablet} {
+    h1 {
+      font-size: 48px;
+    }
   }
 `;
 const Title = styled.h2`
@@ -59,37 +71,71 @@ const Description = styled.p`
   max-width: 1360px;
 `;
 
+const Actions = styled.div`
+  display: flex;
+
+  @media ${device.mobileS} {
+    flex-direction: column;
+  }
+
+  @media ${device.tablet} {
+    flex-direction: row;
+  }
+`;
+
 const Action = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: ${(porps) => porps.$color};
   margin-top: 50px;
-  padding: 60px 80px;
+  height: 160px;
+  width: 280px;
   font-size: 36px;
   font-weight: bold;
   color: #3e613d;
-  display: inline-block;
   border-radius: 10px;
   transition: transform 0.5s;
-  cursor: pointer;
   text-decoration: none;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.1);
   }
 
-  & + & {
-    margin-left: 20px;
+  @media ${device.mobileS} {
+    & + & {
+      margin-left: 0;
+    }
+  }
+
+  @media ${device.tablet} {
+    & + & {
+      margin-left: 20px;
+    }
   }
 `;
 
 const Menu = styled.div`
-  width:100%;
+  width: 100%;
   display: flex;
+  justify-content: space-between;
+
+  @media ${device.mobileS} {
+    flex-direction: column;
+  }
+
+  @media ${device.laptop} {
+    flex-direction: row;
+  }
 `;
 
-const MenuImg = styled.div`
-  width: 482px;
-  height: 482px;
-  background: url(${(props) => props.$img});
+const MenuImgContainer = styled.div`
+  width: 100%;
+`;
+
+const MenuImg = styled.img`
+  width: 100%;
 `;
 
 const Reviews = styled.div`
@@ -98,10 +144,23 @@ const Reviews = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media ${device.mobileS} {
+    flex-direction: column;
+  }
+
+  @media ${device.tablet} {
+    flex-direction: column;
+  }
+
+  @media ${device.desktop} {
+    flex-direction: row;
+  }
 `;
 
 const Reviewer = styled.div`
   flex: 1;
+  min-height: 170px;
   border-radius: 5px;
   box-shadow: -1.4px -1.4px 4px 0 #d8eaef;
   border: solid 1px #c7e5ec;
@@ -112,6 +171,28 @@ const Reviewer = styled.div`
 
   & + & {
     margin-left: 20px;
+  }
+
+  @media ${device.mobileS} {
+    margin: 50px 0;
+    width: 100%;
+    & + & {
+      margin-left: 0;
+    }
+  }
+
+  @media ${device.tablet} {
+    margin: 50px 0;
+    width: 100%;
+    & + & {
+      margin-left: 0;
+    }
+  }
+
+  @media ${device.tablet} {
+    & + & {
+      margin-left: 20px;
+    }
   }
 `;
 
@@ -132,6 +213,7 @@ const ReviewerImg = styled.div`
 const ReviewContent = styled.p`
   margin-top: 50px;
 `;
+
 export default function HomePage() {
   return (
     <>
@@ -147,16 +229,24 @@ export default function HomePage() {
           <br />
           咬一口不只賣餐點，我們希望能夠讓大家愛上料理的魅力，餐館特意打造全開放式廚房，烹調透明化，也不定時舉辦美食廚房DIY，讓大家體驗不需要過多調味，就能擁有千變萬化的食物口感。
         </Description>
-        <div>
+        <Actions>
           <Action $color="#a8e8e1">我要訂位</Action>
           <Action $color="#F9F9B5">查詢訂位</Action>
-        </div>
+        </Actions>
         <Title>Menu 搶先看</Title>
         <Menu>
-          <MenuImg $img={menu_1} />
-          <MenuImg $img={menu_2} />
-          <MenuImg $img={menu_3} />
-          <MenuImg $img={menu_4} />
+          <MenuImgContainer>
+            <MenuImg src={menu_1} />
+          </MenuImgContainer>
+          <MenuImgContainer>
+            <MenuImg src={menu_2} />
+          </MenuImgContainer>
+          <MenuImgContainer>
+            <MenuImg src={menu_3} />
+          </MenuImgContainer>
+          <MenuImgContainer>
+            <MenuImg src={menu_4} />
+          </MenuImgContainer>
         </Menu>
         <Title>吃過都說讚</Title>
 
