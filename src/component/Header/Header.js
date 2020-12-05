@@ -11,7 +11,7 @@ const NavigationBar = styled.nav`
 `;
 
 const Logo = styled(Link)`
-  color: #489846;
+  color: #74bb34;
   font-size: 48px;
   font-weight: bold;
   text-shadow: 3px 3px #c2e0c2;
@@ -28,7 +28,7 @@ const Option = styled(Link)`
   height: 50px;
   justify-content: center;
   align-items: center;
-  color: #489846;
+  color: #74bb34;
   font-size: 36px;
   font-weight: bold;
   text-decoration: none;
@@ -41,7 +41,7 @@ const Option = styled(Link)`
 
   &:hover {
     color: white;
-    background: #489846;
+    background: #74bb34;
   }
 `;
 
