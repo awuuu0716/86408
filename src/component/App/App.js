@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../Header';
 import HomePage from '../../pages/HomePage'
+import Menu from '../../pages/Menu';
 import Footer from '../../component/Footer';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -11,6 +12,9 @@ export default function App() {
       <Switch>
         <Route exact path="/">
           <HomePage />
+        </Route>
+        <Route exact path="/menu">
+          <Menu />
         </Route>
       </Switch>
       <Footer />

@@ -12,6 +12,11 @@ import reviewer_1 from '../../img/reviewer_1.webp';
 import reviewer_2 from '../../img/reviewer_2.webp';
 import reviewer_3 from '../../img/reviewer_3.webp';
 
+const Root = styled.div`
+  width: 100%;
+  background: #fefff8;
+`;
+
 const Banner = styled.section`
   position: relative;
   display: flex;
@@ -59,6 +64,7 @@ const Title = styled.h2`
 const Main = styled.main`
   display: flex;
   padding: 20px;
+  padding-bottom: 100px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -216,7 +222,7 @@ const ReviewContent = styled.p`
 
 export default function HomePage() {
   return (
-    <>
+    <Root>
       <Banner>
         <h1>八六蔬食吧</h1>
       </Banner>
@@ -283,6 +289,6 @@ export default function HomePage() {
           tabIndex="0"
         ></iframe>
       </Main>
-    </>
+    </Root>
   );
 }

@@ -8,6 +8,7 @@ const NavigationBar = styled.nav`
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
+  border-bottom:1px solid #efefef;
 
   @media ${device.mobileS} {
     flex-direction: column;
