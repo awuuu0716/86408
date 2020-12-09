@@ -20,6 +20,7 @@ const FooterBottom = styled.div`
   padding: 10px;
   background: #35564b;
   color: white;
+  line-height: 1.5rem;
   text-align: center;
 `;
 
