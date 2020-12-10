@@ -49,7 +49,7 @@ const ProductContainer = styled.div`
   flex-wrap: wrap;
 
   @media ${device.mobileS} {
-    width: 90vw;
+    width: 81vw;
     margin-top: 20px;
   }
 `;
@@ -71,16 +71,21 @@ const Product = styled(Link)`
   }
 
   @media ${device.mobileS} {
-    width: 90%;
+    width: 97%;
     margin: 20px 0;
   }
 
   @media ${device.laptop} {
-    width: 40%;
+    width: 45%;
     margin: 20px 20px;
   }
 
   @media ${device.laptopL} {
+    width: 545px;
+    margin: 20px 15px;
+  }
+
+  @media ${device.desktop} {
     width: 480px;
     margin: 20px 15px;
   }

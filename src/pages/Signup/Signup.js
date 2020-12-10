@@ -63,37 +63,6 @@ const Button = styled.button`
   &:hover {
     background: #eee;
   }
-  
-  @media ${device.mobileS} {
-    width: 80px;
-    font-size: 16px;
-  }
-
-  @media ${device.tablet} {
-    width: 160px;
-    font-size: 24px;
-  }
-`;
-
-const SignUpButton = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  margin-left: 30px;
-  font-weight: bold;
-  background: white;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 2px 2px 3px #ccc;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
-
-  &:hover {
-    background: #eee;
-  }
 
   & + & {
     margin-left: 30px;
@@ -110,7 +79,7 @@ const SignUpButton = styled(Link)`
   }
 `;
 
-export default function Login() {
+export default function Signup() {
   return (
     <Root>
       <Container>
@@ -124,8 +93,7 @@ export default function Login() {
             <Input type="password" required />
           </InputContainer>
           <InputContainer>
-            <Button>登入</Button>
-            <SignUpButton to="signup">註冊</SignUpButton>
+            <Button>送出</Button>
           </InputContainer>
         </form>
       </Container>

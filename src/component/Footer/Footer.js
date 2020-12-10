@@ -12,7 +12,7 @@ const FooterTop = styled.div`
 `;
 
 const RestaurantDetail = styled.p`
-  color:#333;
+  color: #333;
   line-height: 2rem;
 `;
 
@@ -39,8 +39,7 @@ export default function Footer() {
         <div></div>
       </FooterTop>
       <FooterBottom>
-        Copyright © 2020 86408 Rights Reserved.
-        八六蔬食吧股份有限公司版權所有
+        Copyright © 2020 86408 Rights Reserved. 八六蔬食吧股份有限公司版權所有
       </FooterBottom>
     </Container>
   );
