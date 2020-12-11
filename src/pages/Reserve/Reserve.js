@@ -1,9 +1,10 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { device } from '../../constants/devices';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { addReserve, getReserve } from '../../WebAPI';
+import { getToday, initAvailableTime } from '../../utils';
 
 const Root = styled.div`
   display: flex;
@@ -51,6 +52,7 @@ const InputLabel = styled.label`
 `;
 
 const Input = styled.input`
+  width: 300px;
   &:focus {
     outline: none;
   }
@@ -87,7 +89,6 @@ const Button = styled.button`
 `;
 
 const Topcontainer = styled.div`
-  width: 60%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -102,7 +103,7 @@ const Topcontainer = styled.div`
 
   @media ${device.laptop} {
     flex-direction: row;
-    width: 75%;
+    width: 80%;
     font-size: 16px;
   }
 `;
@@ -130,10 +131,11 @@ const ReserveTime = styled.div`
   border-radius: 50%;
   box-shadow: 2px 2px 3px #ccc;
   transition: all 0.2s ease-in-out;
+  background: ${(props) => (props.$active ? '#74bb34' : 'white')};
   cursor: pointer;
 
   &:hover {
-    background: #eee;
+    background: ${(props) => (props.$active ? '#74bb34' : '#eee')};
   }
 `;
 
@@ -143,48 +145,141 @@ const TimeContainer = styled.div`
   margin-top: 20px;
 `;
 
+const ErrorMessage = styled.span`
+  margin-left: 20px;
+  color: red;
+`;
+
 export default function Reserve() {
+  const [entryTime, setEntryTime] = useState('');
+  const [availableTime, setAvailableTime] = useState(() => initAvailableTime());
+  const [date, setDate] = useState(() => getToday());
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [amount, setAmount] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [value, onChange] = useState(new Date());
+
+  const handleClickDay = (value) => {
+    const dateArray = value.toDateString().split(' ');
+    const date = `${dateArray[1]} ${dateArray[2]} ${dateArray[3]}`;
+    setDate(date);
+    setEntryTime('');
+    getReserve(date).then((res) => {
+      const reservedTime = res.map((reserveData) => reserveData.entryTime);
+      if (reservedTime.length === 0)
+        return setAvailableTime(initAvailableTime());
+      const newAvailableTime = [...availableTime];
+      reservedTime.forEach((index) => {
+        newAvailableTime[index] = {
+          ...newAvailableTime[index],
+          isAvailable: false,
+        };
+      });
+
+      setAvailableTime(newAvailableTime);
+    });
+  };
+
+  const handleClickTime = (timeIndex) => {
+    setEntryTime(timeIndex);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!entryTime) {
+      setErrorMessage('還沒選擇時段喔！');
+      return;
+    }
+    setErrorMessage('');
+    console.log('submit', { date, entryTime, name, phone, amount });
+    addReserve({ date, entryTime, name, phone, amount }).then((res) => {
+      console.log(res);
+      getReserve(date).then((res) => {
+        const reservedTime = res.map((reserveData) => reserveData.entryTime);
+        if (reservedTime.length === 0)
+          return setAvailableTime(initAvailableTime());
+        const newAvailableTime = [...availableTime];
+        reservedTime.forEach((index) => {
+          newAvailableTime[index] = {
+            ...newAvailableTime[index],
+            isAvailable: false,
+          };
+        });
+
+        setAvailableTime(newAvailableTime);
+      });
+    });
+  };
+
+  useEffect(() => {
+    getReserve(date).then((res) => {
+      const reservedTime = res.map((reserveData) => reserveData.entryTime);
+      if (reservedTime.length === 0) return;
+      const newAvailableTime = [...availableTime];
+      reservedTime.forEach((index) => {
+        newAvailableTime[index] = {
+          ...newAvailableTime[index],
+          isAvailable: false,
+        };
+      });
+      setAvailableTime(newAvailableTime);
+    });
+  }, []);
 
   return (
     <Root>
       <Container>
         <Topcontainer>
-          <div>
+          <form onSubmit={handleSubmit}>
             <InputContainer>
               <InputLabel>姓名</InputLabel>
-              <Input required />
+              <Input onChange={(e) => setName(e.target.value)} required />
             </InputContainer>
             <InputContainer>
               <InputLabel>電話</InputLabel>
-              <Input required />
+              <Input
+                type="number"
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
             </InputContainer>
             <InputContainer>
               <InputLabel>人數</InputLabel>
-              <Input required />
+              <Input
+                type="number"
+                onChange={(e) => setAmount(e.target.value)}
+                required
+              />
             </InputContainer>
-          </div>
+            <div>
+              <Button>送出</Button>
+              {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+            </div>
+          </form>
           <Calendar
             onChange={onChange}
             showNeighboringMonth={false}
             value={value}
-            onClickDay={(value, event) => console.log(value.toDateString())}
+            onClickDay={handleClickDay}
           />
         </Topcontainer>
 
         <Bottomcontainer>
-          <InputLabel>可預約時段：</InputLabel>
+          <InputLabel>選擇預約時段：</InputLabel>
           <TimeContainer>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
-            <ReserveTime>13:00</ReserveTime>
+            {availableTime.map(
+              (data, index) =>
+                data.isAvailable && (
+                  <ReserveTime
+                    $active={data.time === entryTime}
+                    onClick={() => handleClickTime(data.index)}
+                    key={index}
+                  >
+                    {data.time}
+                  </ReserveTime>
+                )
+            )}
           </TimeContainer>
         </Bottomcontainer>
       </Container>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { device } from '../../constants/devices';
@@ -84,13 +83,14 @@ const Option = styled(Link)`
 
 export default function Header() {
   return (
-      <NavigationBar>
-        <Logo to="/">八六蔬食吧</Logo>
-        <Options>
-          <Option to="/menu">看菜單</Option>
-          <Option to="/reserve">我要訂位</Option>
-          <Option to="/login">會員登入</Option>
-        </Options>
-      </NavigationBar>
+    <NavigationBar id="header">
+      <Logo to="/">八六蔬食吧</Logo>
+      <Options>
+        <Option to="/menu">看菜單</Option>
+        <Option to="/reserve">我要訂位</Option>
+        <Option to="/login">會員登入</Option>
+        <Option to="/admin/menu">admin</Option>
+      </Options>
+    </NavigationBar>
   );
 }
