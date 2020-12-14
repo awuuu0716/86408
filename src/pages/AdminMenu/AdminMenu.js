@@ -203,7 +203,7 @@ const Form = styled.form`
 `;
 
 export default function AdminMenu() {
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('appetizer');
   const [editId, setEditId] = useState('');
   const [inputMode, setInputmode] = useState('add');
   const [products, setProducts] = useState([]);
