@@ -2,15 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { device } from '../../constants/devices';
-import banner from '../../img/banner.webp';
-import menu_1 from '../../img/menu_1.webp';
-import menu_2 from '../../img/menu_2.webp';
-import menu_3 from '../../img/menu_3.webp';
-import menu_4 from '../../img/menu_4.webp';
+import banner from '../../img/banner.jpg';
+import menu_1 from '../../img/menu_1.png';
+import menu_2 from '../../img/menu_2.png';
+import menu_3 from '../../img/menu_3.png';
+import menu_4 from '../../img/menu_4.png';
 
-import reviewer_1 from '../../img/reviewer_1.webp';
-import reviewer_2 from '../../img/reviewer_2.webp';
-import reviewer_3 from '../../img/reviewer_3.webp';
+import reviewer_1 from '../../img/reviewer_1.png';
+import reviewer_2 from '../../img/reviewer_2.png';
+import reviewer_3 from '../../img/reviewer_3.png';
 
 const Root = styled.div`
   width: 100%;

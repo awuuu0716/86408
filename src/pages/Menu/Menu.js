@@ -3,7 +3,7 @@ import Preload from '../../components/Preload';
 import styled from 'styled-components';
 import { device } from '../../constants/devices';
 import { getProducts } from '../../WebAPI';
-import bg from '../../img/bg.webp';
+import bg from '../../img/bg.jpg';
 
 const Root = styled.div`
   width: 100%;
