@@ -10,6 +10,7 @@ import {
 } from '../../WebAPI';
 import AdminNav from '../../components/AdminNav';
 import { HashLink } from 'react-router-hash-link';
+import Preload from '../../components/Preload';
 
 const Root = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const Root = styled.div`
 `;
 
 const Container = styled.div`
+  position:relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
@@ -210,6 +212,7 @@ export default function AdminMenu() {
   const [price, setPrice] = useState('');
   const [type, setType] = useState('appetizer');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const fileInput = useRef(null);
   const isSubmit = useRef(false);
   const { pathname } = useLocation();
@@ -217,6 +220,7 @@ export default function AdminMenu() {
   const handleAddProduct = (e) => {
     e.preventDefault();
     if (isSubmit.current) return;
+    setIsLoading(true);
     isSubmit.current = true;
     const img = fileInput.current.files[0];
     if (!img) {
@@ -229,6 +233,7 @@ export default function AdminMenu() {
         getProducts(type).then((data) => {
           isSubmit.current = false;
           setProducts(data);
+          setIsLoading(false);
         });
       })
       .catch((err) => console.log(err));
@@ -243,6 +248,7 @@ export default function AdminMenu() {
 
   const handleEditProduct = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const img = fileInput.current.files[0] || null;
     editProduct({
       img,
@@ -252,6 +258,7 @@ export default function AdminMenu() {
       editId,
     })
       .then((data) => {
+        setIsLoading(false);
         getProducts(filter).then((data) => setProducts(data));
       })
       .catch((err) => console.log(err));
@@ -328,6 +335,7 @@ export default function AdminMenu() {
               </InputLabel>
               <UploadImg type="file" ref={fileInput} />
             </InputContainer>
+            <Preload isShow={isLoading} message="新增商品中..." />
           </ProductData>
 
           <Options>

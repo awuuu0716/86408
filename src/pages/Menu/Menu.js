@@ -1,4 +1,5 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useRef } from 'react';
+import Preload from '../../components/Preload';
 import styled from 'styled-components';
 import { device } from '../../constants/devices';
 import { getProducts } from '../../WebAPI';
@@ -9,7 +10,6 @@ const Root = styled.div`
   background: url(${bg}) center/cover;
   background-attachment: fixed;
   padding-top: 20px;
-  animation: fade-in 0.5s ease-in-out;
 `;
 
 const Container = styled.div`
@@ -58,7 +58,7 @@ const Product = styled.div`
   background: #fcffe7db;
   transition: all 0.2s ease-in-out;
   border-radius: 5px;
-  animation: fade-in 0.5s ease-in-out;
+  animation: fade-in 0.6s linear;
 
   &:hover {
     transform: scale(1.01);
@@ -115,9 +115,14 @@ const Price = styled.p`
 export default function Menu() {
   const [filter, setFilter] = useState('appetizer');
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getProducts(filter).then((data) => setProducts(data));
+    setIsLoading(true);
+    getProducts(filter).then((data) => {
+      setProducts(data);
+      setIsLoading(false);
+    });
   }, [filter]);
 
   return (
@@ -137,7 +142,7 @@ export default function Menu() {
             飲品
           </ProductsOption>
         </OptionContainer>
-
+        <Preload isShow={isLoading} message="菜單載入中..."/>
         <ProductContainer>
           {products.map((product) => (
             <Product key={product.id}>
