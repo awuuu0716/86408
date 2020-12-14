@@ -51,6 +51,7 @@ const ProductContainer = styled.div`
 
 const Product = styled.div`
   display: flex;
+  height: fit-content;
   padding-top: 50px;
   flex-direction: column;
   align-items: center;
@@ -87,7 +88,7 @@ const Product = styled.div`
 
 const Img = styled.img`
   width: 400px;
-  height:50%;
+  height: 400px;
   object-fit: cover;
 
   @media ${device.mobileS} {
