@@ -5,6 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import { getUserReserve } from '../../WebAPI';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts';
+import Preload from '../../components/Preload';
 
 const Root = styled.div`
   display: flex;
@@ -85,11 +86,14 @@ const EntryTimeArray = [
 
 export default function CheckReserve() {
   const { user, setUser } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [reserves, setReserve] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     getUserReserve(user).then((data) => {
       setReserve(data);
+       setIsLoading(false);
     });
   }, [user]);
 
@@ -104,7 +108,7 @@ export default function CheckReserve() {
           <ReserveData>電話</ReserveData>
         </ReserveHeader>
       </Container>
-
+      <Preload isShow={isLoading} message="載入訂位資訊中..."/>
       {reserves.map((reserve) => (
         <Container key={reserve.id}>
           <ReserveDataContainer $isDelete={reserve.isDelete}>
