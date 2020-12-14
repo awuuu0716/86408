@@ -55,7 +55,7 @@ const Product = styled.div`
   padding-top: 50px;
   flex-direction: column;
   align-items: center;
-  background: #fcffe7db;
+  background: rgba(255, 255, 255, 0.9);
   transition: all 0.2s ease-in-out;
   border-radius: 5px;
   animation: fade-in 0.6s linear;
@@ -142,7 +142,7 @@ export default function Menu() {
             飲品
           </ProductsOption>
         </OptionContainer>
-        <Preload isShow={isLoading} message="菜單載入中..."/>
+        <Preload isShow={isLoading} message="菜單載入中..." />
         <ProductContainer>
           {products.map((product) => (
             <Product key={product.id}>
