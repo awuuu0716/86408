@@ -226,7 +226,7 @@ export default function AdminMenu() {
     setErrorMessage('');
     addProducts({ img, productName, description, price, type })
       .then((data) => {
-        getProducts('all').then((data) => {
+        getProducts(type).then((data) => {
           isSubmit.current = false;
           setProducts(data);
         });
