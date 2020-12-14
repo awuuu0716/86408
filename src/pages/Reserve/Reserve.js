@@ -187,7 +187,6 @@ export default function Reserve() {
   const [amount, setAmount] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [value, onChange] = useState(new Date());
-  const history = useHistory();
 
   const handleClickDay = (value) => {
     const dateArray = value.toDateString().split(' ');

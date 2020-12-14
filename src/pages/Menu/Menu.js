@@ -133,7 +133,7 @@ export default function Menu() {
             開胃菜
           </ProductsOption>
           <ProductsOption onClick={() => setFilter('main')}>
-            主食
+            主菜
           </ProductsOption>
           <ProductsOption onClick={() => setFilter('dessert')}>
             點心

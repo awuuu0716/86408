@@ -352,7 +352,7 @@ export default function AdminMenu() {
         <ProductsOption onClick={() => setFilter('appetizer')}>
           開胃菜
         </ProductsOption>
-        <ProductsOption onClick={() => setFilter('main')}>主食</ProductsOption>
+        <ProductsOption onClick={() => setFilter('main')}>主菜</ProductsOption>
         <ProductsOption onClick={() => setFilter('dessert')}>
           點心
         </ProductsOption>
