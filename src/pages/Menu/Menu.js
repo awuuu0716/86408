@@ -88,10 +88,14 @@ const Product = styled.div`
 
 const Img = styled.img`
   width: 400px;
-  height: 400px;
   object-fit: cover;
 
   @media ${device.mobileS} {
+    height: 240px;
+    width: 90%;
+  }
+  @media ${device.tablet} {
+    height: 400px;
     width: 90%;
   }
 `;
