@@ -1,5 +1,3 @@
-import emailjs from 'emailjs-com';
-
 export const getToday = () => {
   const dateTime = new Date();
   const dateArray = dateTime.toDateString().split(' ');

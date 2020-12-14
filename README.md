@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# 八六蔬食吧-餐廳前端
+八六蔬食吧是一間假想的蔬食主題餐廳，使用 React.js 搭配 Node.js 搭建的 SPA 網站，平台使用者主要是下列兩種身份，分別為一般消費者（Visitor）、商家管理員（Admin），一般消費者可以瀏覽菜單、註冊會員後可以直接在網站上訂位。商家管理員可以編輯菜單、管理訂位等等。
+![](https://i.imgur.com/UqQe02e.jpg)
+# Demo - 專案展示
+[DEMO](https://awuuu0716.github.io/86408/#/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+歡迎使用管理員測試帳號登入使用，帳密如下(請不要隨意刪除菜單 QAQ，避免前台無菜單可看)：
+帳號名稱：admin
+密碼：admin
 
-## Available Scripts
+# Initial - 專案緣起
+專案發想自 [MTR04-餐廳官網練習作業](https://github.com/Lidemy/mentor-program-4th-awuuu0716/tree/master/homeworks/week6)，在學習到 React 與後端 Node.js 後我決定試著從零開始打造一個前後端分離的 SPA 網站，讓使用者擁有像是 APP 般的使用體驗，輕鬆了解一家餐廳，並且能夠直接在網頁上訂位，無需浪費寶貴的電話費~
 
-In the project directory, you can run:
+# Features - 專案功能
+前台：
+1. 菜單介紹 ( 分類 )
+2. 會員註冊、登入
+3. 訂位(選擇日期、查看可預約時間)、訂位查詢，需登入
 
-### `yarn start`
+後台：
+1. 管理菜單 (CRUD)
+2. 管理訂位(查看某日期的訂位狀況、可以編輯已取消或完成的訂位)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Technical Skills - 使用哪些技術實作專案
+1. Create React App - 快速建立專案項目環境
+2. React hooks - 狀態管理與建立 UI 元件
+3. React Router - 路由管理
+4. styled-components - 輕鬆建立 CSS-in-JS 的 UI 元件
+5. react-calendar - 訂位的日期管理 UI
+6. fetch - 與後端 API 資料交換
+7. React Bootstrap - 處理 Navbar 元件
+8. LocalStorage - 儲存身份認證的 JWT
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Content - 專案內容
+## 前台
+![](https://i.imgur.com/n4TTUJc.jpg)
+![](https://i.imgur.com/fzNNKVM.jpg)
+![](https://i.imgur.com/9gz2Aez.jpg)
+## 後台
+![](https://i.imgur.com/9eLFfCW.jpg)
+![](https://i.imgur.com/NTRqdpg.jpg)
+![](https://i.imgur.com/2UpCNv4.jpg)
 
-### `yarn test`
+# Resource - 資料引用來源
+[unsplash](https://unsplash.com/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Declaration - 聲明
+本作品內圖片、內容等，純粹為個人練習前端使用，不做任何商業用途。
 
-### `yarn build`
+# Installing - 專案安裝流程
+1. clone this repository
+``` 
+git clone https://github.com/awuuu0716/86408
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. 安裝套件
+```
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+3. 在本地端開啟此專案
+```
+yarn start
+```
