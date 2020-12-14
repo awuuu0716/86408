@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/86408/static/js/main.8af585f7.chunk.js",
-    "main.js.map": "/86408/static/js/main.8af585f7.chunk.js.map",
+    "main.js": "/86408/static/js/main.a297380f.chunk.js",
+    "main.js.map": "/86408/static/js/main.a297380f.chunk.js.map",
     "runtime-main.js": "/86408/static/js/runtime-main.45544140.js",
     "runtime-main.js.map": "/86408/static/js/runtime-main.45544140.js.map",
     "static/css/2.8cebfa1f.chunk.css": "/86408/static/css/2.8cebfa1f.chunk.css",
@@ -10,21 +10,21 @@
     "index.html": "/86408/index.html",
     "static/css/2.8cebfa1f.chunk.css.map": "/86408/static/css/2.8cebfa1f.chunk.css.map",
     "static/js/2.61711eb4.chunk.js.LICENSE.txt": "/86408/static/js/2.61711eb4.chunk.js.LICENSE.txt",
-    "static/media/banner.ae38fa09.webp": "/86408/static/media/banner.ae38fa09.webp",
-    "static/media/bg.52ed6b2f.webp": "/86408/static/media/bg.52ed6b2f.webp",
-    "static/media/menu_1.261c4fed.webp": "/86408/static/media/menu_1.261c4fed.webp",
-    "static/media/menu_2.73d3fa5c.webp": "/86408/static/media/menu_2.73d3fa5c.webp",
-    "static/media/menu_3.b85e933f.webp": "/86408/static/media/menu_3.b85e933f.webp",
-    "static/media/menu_4.601e7e40.webp": "/86408/static/media/menu_4.601e7e40.webp",
+    "static/media/banner.d6fe96f9.jpg": "/86408/static/media/banner.d6fe96f9.jpg",
+    "static/media/bg.51e94aec.jpg": "/86408/static/media/bg.51e94aec.jpg",
+    "static/media/menu_1.453daa9f.png": "/86408/static/media/menu_1.453daa9f.png",
+    "static/media/menu_2.fe42ccfb.png": "/86408/static/media/menu_2.fe42ccfb.png",
+    "static/media/menu_3.15f0e7f8.png": "/86408/static/media/menu_3.15f0e7f8.png",
+    "static/media/menu_4.670368d1.png": "/86408/static/media/menu_4.670368d1.png",
     "static/media/preload.c157a33f.svg": "/86408/static/media/preload.c157a33f.svg",
-    "static/media/reviewer_1.c6494e02.webp": "/86408/static/media/reviewer_1.c6494e02.webp",
-    "static/media/reviewer_2.be45e982.webp": "/86408/static/media/reviewer_2.be45e982.webp",
-    "static/media/reviewer_3.8cbfd832.webp": "/86408/static/media/reviewer_3.8cbfd832.webp"
+    "static/media/reviewer_1.d7fa4c0c.png": "/86408/static/media/reviewer_1.d7fa4c0c.png",
+    "static/media/reviewer_2.7bdad200.png": "/86408/static/media/reviewer_2.7bdad200.png",
+    "static/media/reviewer_3.7e9d79b8.png": "/86408/static/media/reviewer_3.7e9d79b8.png"
   },
   "entrypoints": [
     "static/js/runtime-main.45544140.js",
     "static/css/2.8cebfa1f.chunk.css",
     "static/js/2.61711eb4.chunk.js",
-    "static/js/main.8af585f7.chunk.js"
+    "static/js/main.a297380f.chunk.js"
   ]
 }
