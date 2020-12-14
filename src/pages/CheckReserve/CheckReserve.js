@@ -15,6 +15,7 @@ const Root = styled.div`
   width: 100%;
   background: #fefff8;
   padding-top: 20px;
+  min-height: 60vh;
   animation: fade-in 0.5s ease-in-out;
 `;
 

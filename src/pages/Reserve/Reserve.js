@@ -206,7 +206,7 @@ export default function Reserve() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isPhoneValid(phone)) return setErrorMessage('請輸入正確的電話號碼');
-    if (!entryTime) {
+    if (entryTime==='') {
       setErrorMessage('還沒選擇時段喔！');
       return;
     }

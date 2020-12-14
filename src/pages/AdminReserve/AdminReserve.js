@@ -38,7 +38,7 @@ const Container = styled.div`
 
 const Button = styled.button`
   width: 75px;
-  padding:5px;
+  padding: 5px;
   font-weight: bold;
   background: white;
   border: none;
@@ -111,7 +111,7 @@ export default function AdminReserve() {
   const [date, setDate] = useState(() => getToday());
   const [reserves, setReserve] = useState([]);
   const [availableTime, setAvailableTime] = useState(() => initAvailableTime());
-  
+
   useEffect(() => {
     getReserve(date).then((res) => {
       setReserve(res);
@@ -130,16 +130,12 @@ export default function AdminReserve() {
   };
 
   const handleDelete = (id) => {
-    deleteReserve(id).then((res) => console.log(res));
-    setReserve(
-      reserves.map((reserve) => {
-        if (reserve.id !== id) return reserve;
-        return {
-          ...reserve,
-          isDelete: true,
-        };
-      })
-    );
+    deleteReserve(id).then((res) => {
+      getReserve(date).then((res) => {
+        setReserve(res);
+        setAvailableTime(getAvailableTime(res));
+      });
+    });
   };
 
   return (

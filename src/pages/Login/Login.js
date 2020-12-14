@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { getMe, login } from '../../WebAPI';
 import { setAuthToken } from '../../utils';
 import { AuthContext } from '../../contexts';
+import Preload from '../../components/Preload';
 
 const Root = styled.div`
   display: flex;
@@ -128,6 +129,7 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const isSubmit = useRef(false);
   const history = useHistory();
 
@@ -136,6 +138,7 @@ export default function Login() {
     e.preventDefault();
     if (isSubmit.current) return;
     isSubmit.current = true;
+    setIsLoading(true);
 
     login(username, password).then((data) => {
       if (data.ok === 0) {
@@ -150,6 +153,7 @@ export default function Login() {
           return setErrorMessage('認證錯誤');
         }
         setUser(response.data);
+        setIsLoading(false);
         history.push('/');
         isSubmit.current = false;
       });
@@ -184,6 +188,7 @@ export default function Login() {
           </InputContainer>
         </form>
       </Container>
+      <Preload isShow={isLoading} message="登入中..." />
     </Root>
   );
 }
