@@ -14,7 +14,7 @@ const Root = styled.div`
   flex-direction: column;
   width: 100%;
   background: #fefff8;
-  padding-top: 20px;
+  padding-top: 100px;
 `;
 
 const Container = styled.div`

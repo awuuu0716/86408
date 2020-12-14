@@ -21,7 +21,7 @@ const Root = styled.div`
   align-items: center;
   width: 100%;
   background: #fefff8;
-  padding-top: 20px;
+  padding-top: 100px;
   animation: fade-in 0.5s ease-in-out;
 `;
 

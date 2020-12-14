@@ -9,7 +9,7 @@ const Root = styled.div`
   width: 100%;
   background: url(${bg}) center/cover;
   background-attachment: fixed;
-  padding-top: 20px;
+  padding-top: 100px;
 `;
 
 const Container = styled.div`
@@ -103,12 +103,14 @@ const Img = styled.img`
 const Name = styled.h4`
   color: #74bb34;
   font-size: 30px;
+  margin-top: 10px;
   margin-bottom: 0;
 `;
 
 const Description = styled.p`
   color: #4c7923;
   font-size: 24px;
+  padding: 10px;
 `;
 
 const Price = styled.p`

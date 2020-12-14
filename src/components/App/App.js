@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import Header from '../Header';
+import NavBootstrap from '../NavBootstrap'
 import HomePage from '../../pages/HomePage';
 import CheckReserve from '../../pages/CheckReserve';
 import AdminMenu from '../../pages/AdminMenu';
@@ -27,7 +27,7 @@ export default function App() {
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <Router>
-        <Header />
+        <NavBootstrap />
         <Switch>
           <Route exact path="/">
             <HomePage />
