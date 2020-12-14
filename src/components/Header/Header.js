@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { setAuthToken } from '../../utils';
 import { device } from '../../constants/devices';
 

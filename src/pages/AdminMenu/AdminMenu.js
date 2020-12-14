@@ -252,7 +252,6 @@ export default function AdminMenu() {
       editId,
     })
       .then((data) => {
-        console.log(data);
         getProducts(filter).then((data) => setProducts(data));
       })
       .catch((err) => console.log(err));

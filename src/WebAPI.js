@@ -1,5 +1,5 @@
 import { getAuthToken } from './utils';
-const BASE_URL = 'http://localhost:4000';
+const BASE_URL = 'https://ancient-sea-54746.herokuapp.com';
 
 export const addProducts = ({ img, productName, description, price, type }) => {
   const formData = new FormData();
@@ -53,7 +53,6 @@ export const editProduct = ({
     }).then((res) => res.json());
   }
 
-  console.log('aa');
   return fetch(`${BASE_URL}/products/reupload/${editId}`, {
     method: 'PUT',
     body: formData,
@@ -68,7 +67,6 @@ export const addReserve = ({
   amount,
   username,
 }) => {
-  console.log('api', { date, entryTime, name, phone, amount, username });
   return fetch(`${BASE_URL}/reserve`, {
     method: 'POST',
     headers: {
@@ -91,7 +89,6 @@ export const getUserReserve = (username) => {
 };
 
 export const deleteReserve = (id) => {
-  console.log(id);
   return fetch(`${BASE_URL}/reserve/${id}`, {
     method: 'DELETE',
   }).then((res) => res.json());
@@ -123,7 +120,6 @@ export const getMe = () => {
 };
 
 export const login = (username, password) => {
-  console.log('send', username, password);
   return fetch(`${BASE_URL}/login`, {
     method: 'POST',
     headers: {

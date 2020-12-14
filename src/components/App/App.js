@@ -9,7 +9,6 @@ import Menu from '../../pages/Menu';
 import Login from '../../pages/Login';
 import Signup from '../../pages/Signup';
 import Footer from '../Footer';
-
 import { getMe } from '../../WebAPI';
 import { getAuthToken } from '../../utils';
 import { AuthContext } from '../../contexts';
