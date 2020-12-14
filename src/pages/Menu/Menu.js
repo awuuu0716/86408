@@ -87,6 +87,7 @@ const Product = styled.div`
 
 const Img = styled.img`
   width: 400px;
+  height:50%;
   object-fit: cover;
 
   @media ${device.mobileS} {
