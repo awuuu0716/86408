@@ -1,10 +1,11 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { device } from '../../constants/devices';
 import AdminNav from '../../components/AdminNav';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { getReserve, deleteReserve } from '../../WebAPI';
+import { getToday, getAvailableTime, initAvailableTime } from '../../utils';
 
 const Root = styled.div`
   display: flex;
@@ -23,41 +24,21 @@ const Container = styled.div`
   background: white;
   color: #333;
   box-shadow: 3px 3px 4px #ccc;
+  border-radius: 10px;
 
-  @media ${device.mobileS} {
-    border-radius: 0;
-    padding: 0;
-    width: 100%;
+  @media ${device.tablet} {
+    width: 85%;
   }
 
   @media ${device.laptop} {
-    border-radius: 10px;
-    width: 1200px;
+    width: 85%;
     padding: 20px;
   }
 `;
 
-const InputContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 50px 0;
-`;
-
-const InputLabel = styled.label`
-  font-weight: bold;
-  margin-right: 30px;
-  font-size: 24px;
-  width: 160px;
-`;
-
-const Input = styled.input`
-  &:focus {
-    outline: none;
-  }
-`;
-
 const Button = styled.button`
-  height: 50px;
+  width: 75px;
+  padding:5px;
   font-weight: bold;
   background: white;
   border: none;
@@ -70,73 +51,17 @@ const Button = styled.button`
   &:hover {
     background: #eee;
   }
-
-  @media ${device.mobileS} {
-    width: 80px;
-    font-size: 16px;
-  }
-
-  @media ${device.tablet} {
-    width: 160px;
-    font-size: 24px;
-  }
-`;
-
-const SignUpButton = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  margin-left: 30px;
-  font-weight: bold;
-  background: white;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 2px 2px 3px #ccc;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
-
-  &:hover {
-    background: #eee;
-  }
-
-  & + & {
-    margin-left: 30px;
-  }
-
-  @media ${device.mobileS} {
-    width: 80px;
-    font-size: 16px;
-  }
-
-  @media ${device.tablet} {
-    width: 160px;
-    font-size: 24px;
-  }
-`;
-
-const ProductData = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const UploadImg = styled.input`
-  width: 300px;
-  height: 300px;
-  box-shadow: 2px 2px 3px #ccc;
-  cursor: pointer;
-`;
-
-const Topcontainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
 `;
 
 const ReserveDataContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  opacity: ${(props) => (props.$isDelete ? 0.2 : 1)};
+`;
+
+const ReserveHeader = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
 `;
@@ -160,24 +85,63 @@ const EntryTimeArray = [
   '20:00',
 ];
 
+const TimeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 18px;
+`;
+
+const Time = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  margin: 10px 10px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 50%;
+  box-shadow: 2px 2px 3px #ccc;
+  background: white;
+`;
+
 export default function AdminReserve() {
   const [value, onChange] = useState(new Date());
-  const [reserves, setReserve] = useState([
-    {
-      date: 'Wed Dec 16 2020',
-      time: 2,
-      name: '王大明',
-      amount: 2,
-      phone: '0912345678',
-    },
-    {
-      date: 'Wed Dec 16 2020',
-      time: 3,
-      name: '王中明',
-      amount: 2,
-      phone: '0912345678',
-    },
-  ]);
+  const [date, setDate] = useState(() => getToday());
+  const [reserves, setReserve] = useState([]);
+  const [availableTime, setAvailableTime] = useState(() => initAvailableTime());
+  
+  useEffect(() => {
+    getReserve(date).then((res) => {
+      setReserve(res);
+      setAvailableTime(getAvailableTime(res));
+    });
+  }, []);
+
+  const handleClickDay = (value) => {
+    const dateArray = value.toDateString().split(' ');
+    const date = `${dateArray[1]} ${dateArray[2]} ${dateArray[3]}`;
+    setDate(date);
+    getReserve(date).then((res) => {
+      setReserve(res);
+      setAvailableTime(getAvailableTime(res));
+    });
+  };
+
+  const handleDelete = (id) => {
+    deleteReserve(id).then((res) => console.log(res));
+    setReserve(
+      reserves.map((reserve) => {
+        if (reserve.id !== id) return reserve;
+        return {
+          ...reserve,
+          isDelete: true,
+        };
+      })
+    );
+  };
+
   return (
     <Root>
       <AdminNav />
@@ -187,27 +151,35 @@ export default function AdminReserve() {
           onChange={onChange}
           showNeighboringMonth={false}
           value={value}
-          onClickDay={(value, event) => console.log(value.toDateString())}
+          onClickDay={handleClickDay}
         />
+        <TimeContainer>
+          {date} 剩餘時段：
+          {availableTime.map(
+            (timeData, index) =>
+              timeData.isAvailable && <Time key={index}>{timeData.time}</Time>
+          )}
+        </TimeContainer>
       </Container>
       <Container>
-        <ReserveDataContainer>
+        <ReserveHeader>
           <ReserveData>日期</ReserveData>
           <ReserveData>時段</ReserveData>
           <ReserveData>姓名</ReserveData>
           <ReserveData>人數</ReserveData>
           <ReserveData>電話</ReserveData>
-        </ReserveDataContainer>
+        </ReserveHeader>
       </Container>
 
       {reserves.map((reserve) => (
-        <Container>
-          <ReserveDataContainer>
+        <Container key={reserve.id}>
+          <ReserveDataContainer $isDelete={reserve.isDelete}>
             <ReserveData>{reserve.date}</ReserveData>
-            <ReserveData>{EntryTimeArray[reserve.time]}</ReserveData>
+            <ReserveData>{EntryTimeArray[reserve.entryTime]}</ReserveData>
             <ReserveData>{reserve.name}</ReserveData>
             <ReserveData>{reserve.amount}</ReserveData>
             <ReserveData>{reserve.phone}</ReserveData>
+            <Button onClick={() => handleDelete(reserve.id)}>刪除</Button>
           </ReserveDataContainer>
         </Container>
       ))}

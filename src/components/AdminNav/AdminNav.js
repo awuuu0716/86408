@@ -13,16 +13,11 @@ const Nav = styled.nav`
   box-shadow: 3px 3px 4px #ccc;
 
   @media ${device.mobileS} {
-    border-radius: 0;
-    padding: 0;
-    width: 100%;
-  }
-
-  @media ${device.laptop} {
     border-radius: 10px;
-    width: 1200px;
+    width: 85%;
     padding: 20px;
   }
+
 `;
 const Button = styled(Link)`
   display: flex;

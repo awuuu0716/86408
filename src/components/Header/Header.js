@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts';
+import { Link, useHistory } from 'react-router-dom';
+import { setAuthToken } from '../../utils';
 import { device } from '../../constants/devices';
 
 const NavigationBar = styled.nav`
@@ -7,7 +10,8 @@ const NavigationBar = styled.nav`
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
-  border-bottom:1px solid #efefef;
+  background: #fefff8;
+  border-bottom: 1px solid #efefef;
 
   @media ${device.mobileS} {
     flex-direction: column;
@@ -47,6 +51,11 @@ const Options = styled.div`
 
   @media ${device.tablet} {
     flex-direction: row;
+    width: 100%;
+  }
+  @media ${device.laptop} {
+    flex-direction: row;
+    width: auto;
   }
 `;
 
@@ -75,6 +84,13 @@ const Option = styled(Link)`
   }
 
   @media ${device.tablet} {
+    font-size: 30px;
+    & + & {
+      margin-left: 20;
+    }
+  }
+  @media ${device.laptop} {
+    font-size: 36px;
     & + & {
       margin-left: 20;
     }
@@ -82,15 +98,28 @@ const Option = styled(Link)`
 `;
 
 export default function Header() {
+  const { user, setUser } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    setAuthToken('');
+    setUser(null);
+  };
   return (
-    <NavigationBar id="header">
+    <NavigationBar>
       <Logo to="/">八六蔬食吧</Logo>
       <Options>
         <Option to="/menu">看菜單</Option>
         <Option to="/reserve">我要訂位</Option>
-        <Option to="/login">會員登入</Option>
-        <Option to="/admin/menu">admin</Option>
+        {!user && <Option to="/login">會員登入</Option>}
+        {user && <Option to="/reserve/user">我的訂位</Option>}
+        {user === 'admin' && <Option to="/admin/menu">管理後台</Option>}
+        {user && (
+          <Option to="/" onClick={handleLogout}>
+            登出
+          </Option>
+        )}
       </Options>
     </NavigationBar>
   );
+  
 }

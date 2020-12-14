@@ -1,45 +1,40 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { device } from '../../constants/devices';
-import menu_1 from '../../img/menu_1.webp';
+import { getProducts } from '../../WebAPI';
+import bg from '../../img/bg.webp';
 
 const Root = styled.div`
   width: 100%;
-  background: #fefff8;
+  background: url(${bg}) center/cover;
+  background-attachment: fixed;
   padding-top: 20px;
+  animation: fade-in 0.5s ease-in-out;
 `;
 
 const Container = styled.div`
   width: 80%;
+  min-height: 100vh;
   margin: 20px auto;
-`;
-
-const Title = styled.h1`
-  color: #ffb03a;
-  font-weight: bold;
-  margin-left:20px;
-`;
-
-const Divider = styled.div`
-  width: 80vw;
-  border-top: 2px solid #ffb03a;
+  margin-bottom: 0;
 `;
 
 const OptionContainer = styled.div`
   display: flex;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
 `;
 
-const ProductsOption = styled(Link)`
-  color: #333;
-  border-bottom: 2px solid transparent;
-  text-decoration: none;
+const ProductsOption = styled.div`
+  color: #4b731f;
+  border-bottom: 5px solid transparent;
   font-weight: bold;
   padding: 30px 15px;
-  font-size: 20px;
+  font-size: 32px;
+  cursor: pointer;
 
   &:hover {
-    border-bottom: 2px solid #ffb03a;
+    border-bottom: 5px solid #ffb03a;
   }
 `;
 
@@ -54,16 +49,15 @@ const ProductContainer = styled.div`
   }
 `;
 
-const Product = styled(Link)`
+const Product = styled.div`
   display: flex;
   padding-top: 50px;
   flex-direction: column;
   align-items: center;
-
-  background: #8ad65a;
+  background: #fcffe7db;
   transition: all 0.2s ease-in-out;
-  text-decoration: none;
   border-radius: 5px;
+  animation: fade-in 0.5s ease-in-out;
 
   &:hover {
     transform: scale(1.01);
@@ -101,66 +95,56 @@ const Img = styled.img`
 `;
 
 const Name = styled.h4`
-  color: white;
-  font-size: 24px;
+  color: #74bb34;
+  font-size: 30px;
+  margin-bottom: 0;
 `;
 
 const Description = styled.p`
-  color: white;
-  font-size: 18px;
+  color: #4c7923;
+  font-size: 24px;
 `;
 
 const Price = styled.p`
-  color: #333;
-  font-size: 18px;
+  color: #74bb34;
+  font-size: 20px;
 `;
 
 export default function Menu() {
+  const [filter, setFilter] = useState('appetizer');
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    getProducts(filter).then((data) => setProducts(data));
+  }, [filter]);
+
   return (
     <Root>
       <Container>
-        <Title>全部商品</Title>
-        <Divider />
         <OptionContainer>
-          <ProductsOption to="/menu/all">全部商品</ProductsOption>
-          <ProductsOption to="/menu/appetizer">開胃菜</ProductsOption>
-          <ProductsOption to="/products/main">主食</ProductsOption>
-          <ProductsOption to="/products/dessert">點心</ProductsOption>
-          <ProductsOption to="/products/beverage">飲品</ProductsOption>
+          <ProductsOption onClick={() => setFilter('appetizer')}>
+            開胃菜
+          </ProductsOption>
+          <ProductsOption onClick={() => setFilter('main')}>
+            主食
+          </ProductsOption>
+          <ProductsOption onClick={() => setFilter('dessert')}>
+            點心
+          </ProductsOption>
+          <ProductsOption onClick={() => setFilter('beverage')}>
+            飲品
+          </ProductsOption>
         </OptionContainer>
-        <Divider />
 
         <ProductContainer>
-          <Product to="/products/1">
-            <Img src={menu_1} alt="A product" />
-            <Name>PRODUCT NAME</Name>
-            <Description>DESCROPTION DESCRIPION</Description>
-            <Price>NT$1000</Price>
-          </Product>
-          <Product>
-            <Img src={menu_1} alt="A product" />
-            <Name>PRODUCT NAME</Name>
-            <Description>DESCROPTION DESCRIPION</Description>
-            <Price>NT$1000</Price>
-          </Product>
-          <Product>
-            <Img src={menu_1} alt="A product" />
-            <Name>PRODUCT NAME</Name>
-            <Description>DESCROPTION DESCRIPION</Description>
-            <Price>NT$1000</Price>
-          </Product>
-          <Product>
-            <Img src={menu_1} alt="A product" />
-            <Name>PRODUCT NAME</Name>
-            <Description>DESCROPTION DESCRIPION</Description>
-            <Price>NT$1000</Price>
-          </Product>
-          <Product>
-            <Img src={menu_1} alt="A product" />
-            <Name>PRODUCT NAME</Name>
-            <Description>DESCROPTION DESCRIPION</Description>
-            <Price>NT$1000</Price>
-          </Product>
+          {products.map((product) => (
+            <Product key={product.id}>
+              <Img src={product.url} alt="A product" />
+              <Name>{product.name}</Name>
+              <Description>{product.desc}</Description>
+              <Price>NT${product.price}</Price>
+            </Product>
+          ))}
         </ProductContainer>
       </Container>
     </Root>

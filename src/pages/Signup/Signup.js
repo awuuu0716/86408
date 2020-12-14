@@ -1,7 +1,11 @@
-import React from 'react';
+import { React, useState, useContext, useRef } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { isPhoneValid, setAuthToken} from '../../utils';
+import { signUp, getMe } from '../../WebAPI';
 import { device } from '../../constants/devices';
+import { AuthContext } from '../../contexts';
+import { useHistory } from 'react-router-dom';
+import Modal from '../../components/Modal';
 
 const Root = styled.div`
   display: flex;
@@ -32,6 +36,7 @@ const Container = styled.div`
 `;
 
 const InputContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   margin: 50px 0;
@@ -79,24 +84,95 @@ const Button = styled.button`
   }
 `;
 
+const ErrorMessage = styled.div`
+  position: absolute;
+  top: 36px;
+  color: red;
+`;
+
 export default function Signup() {
+  const { setUser } = useContext(AuthContext);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const isSubmit = useRef(false);
+  const history = useHistory();
+
+  const handleCheckPhone = () => {
+    if (!isPhoneValid(phone)) return setErrorMessage('請輸入正確的電話號碼');
+    setErrorMessage('');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isSubmit.current) return;
+    if (!isPhoneValid(phone)) return setErrorMessage('請輸入正確的電話號碼');
+    setErrorMessage('');
+    signUp({ userName, phone, password }).then((res) => {
+      if (res.ok !== 1) return setErrorMessage('此帳號已被註冊');
+      setAuthToken(res.token);
+      getMe(res.token).then((response) => {
+        if (response.ok !== 1) {
+          setAuthToken('');
+          return setErrorMessage(response.toString());
+        }
+        setUser(response.data);
+        setIsShowModal(true);
+        isSubmit.current = false;
+      });
+    });
+  };
+
+  const handleCloseModal = () => {
+    history.push('/');
+  };
+
   return (
     <Root>
       <Container>
-        <form>
+        <form onSubmit={handleSubmit}>
           <InputContainer>
             <InputLabel>帳號</InputLabel>
-            <Input required />
+            <Input
+              required
+              onChange={(e) => setUserName(e.target.value)}
+              value={userName}
+            />
           </InputContainer>
           <InputContainer>
-            <InputLabel>密碼</InputLabel>
-            <Input type="password" required />
+            <InputLabel>電話</InputLabel>
+            <Input
+              type="number"
+              required
+              onChange={(e) => setPhone(e.target.value)}
+              onBlur={handleCheckPhone}
+              value={phone}
+            />
           </InputContainer>
+
+          <InputContainer>
+            <InputLabel>密碼</InputLabel>
+            <Input
+              type="password"
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          </InputContainer>
+
           <InputContainer>
             <Button>送出</Button>
           </InputContainer>
         </form>
       </Container>
+      <Modal
+        message="註冊成功"
+        isShowModal={isShowModal}
+        closeModal={handleCloseModal}
+      />
     </Root>
   );
 }

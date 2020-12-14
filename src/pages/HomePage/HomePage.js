@@ -27,7 +27,7 @@ const Banner = styled.section`
   color: white;
   font-weight: bold;
   background: url(${banner}) no-repeat center/cover;
-
+  animation: fade-in 0.5s ease-in-out;
   &::after {
     content: '';
     position: absolute;
@@ -236,8 +236,9 @@ export default function HomePage() {
           咬一口不只賣餐點，我們希望能夠讓大家愛上料理的魅力，餐館特意打造全開放式廚房，烹調透明化，也不定時舉辦美食廚房DIY，讓大家體驗不需要過多調味，就能擁有千變萬化的食物口感。
         </Description>
         <Actions>
-          <Action $color="#a8e8e1">我要訂位</Action>
-          <Action $color="#F9F9B5">查詢訂位</Action>
+          <Action $color="#a8e8e1" to="/reserve">
+            我要訂位
+          </Action>
         </Actions>
         <Title>Menu 搶先看</Title>
         <Menu>

@@ -37,7 +37,12 @@ const Container = styled.div`
 
   @media ${device.laptop} {
     border-radius: 10px;
-    width: 1200px;
+    width: 85%;
+    padding: 20px;
+  }
+  @media ${device.laptopL} {
+    border-radius: 10px;
+    width: 60%;
     padding: 20px;
   }
 `;
@@ -115,19 +120,16 @@ const EditButton = styled(HashLink)`
 `;
 
 const ProductData = styled.div`
+  width: 490px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
 `;
 
 const UploadImg = styled.input`
   cursor: pointer;
-`;
-
-const Topcontainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
 `;
 
 const ProductContainer = styled.div`
@@ -169,35 +171,68 @@ const ErrorMessage = styled.span`
   color: red;
 `;
 
+const Select = styled.select`
+  width: 205px;
+`;
+
+const OptionContainer = styled.div`
+  display: flex;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+`;
+
+const ProductsOption = styled.div`
+  color: #4b731f;
+  border-bottom: 5px solid transparent;
+  font-weight: bold;
+  padding: 30px 15px;
+  font-size: 32px;
+  cursor: pointer;
+
+  &:hover {
+    border-bottom: 5px solid #ffb03a;
+  }
+`;
+
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
 export default function AdminMenu() {
+  const [filter, setFilter] = useState('all');
+  const [editId, setEditId] = useState('');
   const [inputMode, setInputmode] = useState('add');
   const [products, setProducts] = useState([]);
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [type, setType] = useState('appetizer');
   const [errorMessage, setErrorMessage] = useState('');
   const fileInput = useRef(null);
+  const isSubmit = useRef(false);
   const { pathname } = useLocation();
 
   const handleAddProduct = (e) => {
     e.preventDefault();
+    if (isSubmit.current) return;
+    isSubmit.current = true;
     const img = fileInput.current.files[0];
     if (!img) {
       setErrorMessage('還沒上傳圖片喔');
       return;
     }
     setErrorMessage('');
-    addProducts({ img, productName, description, price })
+    addProducts({ img, productName, description, price, type })
       .then((data) => {
-        console.log(data);
-        getProducts().then((data) => setProducts(data));
+        getProducts('all').then((data) => {
+          isSubmit.current = false;
+          setProducts(data);
+        });
       })
       .catch((err) => console.log(err));
   };
-
-  useEffect(() => {
-    getProducts().then((data) => setProducts(data));
-  }, []);
 
   const handleDelete = (deletedId) => {
     deleteProduct(deletedId).then((data) => {
@@ -206,84 +241,96 @@ export default function AdminMenu() {
     });
   };
 
-  const handleEditProduct = (id, preImgUrl) => {
-    const img = fileInput.current.files[0];
+  const handleEditProduct = (e) => {
+    e.preventDefault();
+    const img = fileInput.current.files[0] || null;
     editProduct({
       img,
       productName,
       description,
       price,
-      preImgUrl,
-      id,
+      editId,
     })
       .then((data) => {
         console.log(data);
-        getProducts().then((data) => setProducts(data));
+        getProducts(filter).then((data) => setProducts(data));
       })
       .catch((err) => console.log(err));
   };
 
   const handleQuitEdit = () => {
-    fileInput.current = null;
     setInputmode('add');
+    setEditId('');
     setProductName('');
     setDescription('');
     setPrice('');
   };
 
-  const addDataToInput = (id) => {
+  const addDataToEdit = (id) => {
     setInputmode('edit');
     const targetProduct = products.filter((product) => product.id === id)[0];
-    console.log(targetProduct);
     const { name, price, desc } = targetProduct;
+    setEditId(id);
     setProductName(name);
     setDescription(desc);
     setPrice(price);
   };
 
+  useEffect(() => {
+    getProducts(filter).then((data) => setProducts(data));
+  }, [filter]);
+
   return (
     <Root>
       <AdminNav />
 
-      <form
+      <Form
         onSubmit={inputMode === 'add' ? handleAddProduct : handleEditProduct}
       >
-        <Container>
-          <Topcontainer>
-            <ProductData>
-              <InputContainer>
-                <InputLabel>商品名稱：</InputLabel>
-                <Input
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  required
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>商品價錢：</InputLabel>
-                <Input
-                  type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  required
-                />
-              </InputContainer>
-              <InputContainer>
-                <InputLabel>商品描述：</InputLabel>
-                <Input
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </InputContainer>
-            </ProductData>
+        <Container id="input">
+          <ProductData>
+            <InputContainer>
+              <InputLabel>商品名稱：</InputLabel>
+              <Input
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                required
+              />
+            </InputContainer>
+            <InputContainer>
+              <InputLabel>商品價錢：</InputLabel>
+              <Input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+              />
+            </InputContainer>
+            <InputContainer>
+              <InputLabel>商品種類：</InputLabel>
+              <Select value={type} onChange={(e) => setType(e.target.value)}>
+                <option value="appetizer">開胃菜</option>　
+                <option value="main">主菜</option>　
+                <option value="dessert">點心</option>　
+                <option value="beverage">飲料</option>
+              </Select>
+            </InputContainer>
+            <InputContainer>
+              <InputLabel>商品描述：</InputLabel>
+              <Input
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </InputContainer>
             <InputContainer>
               <InputLabel>
                 {inputMode === 'add' ? '上傳圖片：' : '重新上傳圖片：'}
               </InputLabel>
               <UploadImg type="file" ref={fileInput} />
             </InputContainer>
-          </Topcontainer>
+          </ProductData>
+
           <Options>
             <Button>{inputMode === 'add' ? '新增品項' : '送出編輯'}</Button>
             {inputMode === 'edit' && (
@@ -292,7 +339,20 @@ export default function AdminMenu() {
             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           </Options>
         </Container>
-      </form>
+      </Form>
+
+      <OptionContainer>
+        <ProductsOption onClick={() => setFilter('appetizer')}>
+          開胃菜
+        </ProductsOption>
+        <ProductsOption onClick={() => setFilter('main')}>主食</ProductsOption>
+        <ProductsOption onClick={() => setFilter('dessert')}>
+          點心
+        </ProductsOption>
+        <ProductsOption onClick={() => setFilter('beverage')}>
+          飲品
+        </ProductsOption>
+      </OptionContainer>
 
       {products.map((product) => (
         <Container key={product.id}>
@@ -301,14 +361,15 @@ export default function AdminMenu() {
               <ProductImg src={product.url} />
               <DescContainer>
                 <h1>{product.name}</h1>
+                <Desc>{product.type}</Desc>
                 <Desc>NT$ {product.price}</Desc>
                 <Desc>{product.desc}</Desc>
               </DescContainer>
             </ProductContainer>
             <Options>
               <EditButton
-                to={`${pathname}#header`}
-                onClick={() => addDataToInput(product.id)}
+                to={`${pathname}#input`}
+                onClick={() => addDataToEdit(product.id)}
               >
                 編輯
               </EditButton>

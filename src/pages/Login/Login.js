@@ -1,7 +1,11 @@
-import React from 'react';
+import { useState, useRef, useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { device } from '../../constants/devices';
+import { useHistory } from 'react-router-dom';
+import { getMe, login } from '../../WebAPI';
+import { setAuthToken } from '../../utils';
+import { AuthContext } from '../../contexts';
 
 const Root = styled.div`
   display: flex;
@@ -11,9 +15,11 @@ const Root = styled.div`
   height: 60vh;
   background: #fefff8;
   padding-top: 20px;
+  animation: fade-in 0.5s ease-in-out;
 `;
 
 const Container = styled.div`
+  position: relative;
   margin-bottom: 30px;
   background: white;
   color: #333;
@@ -63,7 +69,7 @@ const Button = styled.button`
   &:hover {
     background: #eee;
   }
-  
+
   @media ${device.mobileS} {
     width: 80px;
     font-size: 16px;
@@ -110,21 +116,70 @@ const SignUpButton = styled(Link)`
   }
 `;
 
+const ErrorMessage = styled.div`
+  position: absolute;
+  top: 56%;
+  left: 42%;
+  color: red;
+`;
+
 export default function Login() {
+  const { setUser } = useContext(AuthContext);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const isSubmit = useRef(false);
+  const history = useHistory();
+
+  const handleSubmit = (e) => {
+    setErrorMessage('');
+    e.preventDefault();
+    if (isSubmit.current) return;
+    isSubmit.current = true;
+
+    login(username, password).then((data) => {
+      if (data.ok === 0) {
+        setErrorMessage(data.message);
+        isSubmit.current = false;
+        return;
+      }
+      setAuthToken(data.token);
+      getMe().then((response) => {
+        if (response.ok !== 1) {
+          setAuthToken('');
+          return setErrorMessage('認證錯誤');
+        }
+        setUser(response.data);
+        history.push('/');
+        isSubmit.current = false;
+      });
+    });
+  };
+
   return (
     <Root>
       <Container>
-        <form>
+        <form onSubmit={handleSubmit}>
           <InputContainer>
             <InputLabel>帳號</InputLabel>
-            <Input required />
+            <Input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
           </InputContainer>
           <InputContainer>
             <InputLabel>密碼</InputLabel>
-            <Input type="password" required />
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </InputContainer>
+          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           <InputContainer>
-            <Button>登入</Button>
+            <Button type="submit">登入</Button>
             <SignUpButton to="signup">註冊</SignUpButton>
           </InputContainer>
         </form>

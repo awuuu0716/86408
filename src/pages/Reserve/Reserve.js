@@ -2,9 +2,18 @@ import { React, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { device } from '../../constants/devices';
 import Calendar from 'react-calendar';
+import { useHistory } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import { addReserve, getReserve } from '../../WebAPI';
-import { getToday, initAvailableTime } from '../../utils';
+import Modal from '../../components/Modal';
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts';
+import {
+  getToday,
+  initAvailableTime,
+  getAvailableTime,
+  isPhoneValid,
+} from '../../utils';
 
 const Root = styled.div`
   display: flex;
@@ -13,6 +22,7 @@ const Root = styled.div`
   width: 100%;
   background: #fefff8;
   padding-top: 20px;
+  animation: fade-in 0.5s ease-in-out;
 `;
 
 const Container = styled.div`
@@ -49,12 +59,27 @@ const InputLabel = styled.label`
   font-weight: bold;
   margin-right: 30px;
   font-size: 24px;
+
+  @media ${device.mobileS} {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+  @media ${device.laptop} {
+    font-size: 24px;
+    margin-right: 30px;
+  }
 `;
 
 const Input = styled.input`
-  width: 300px;
   &:focus {
     outline: none;
+  }
+
+  @media ${device.mobileS} {
+    width: 150px;
+  }
+  @media ${device.laptop} {
+    width: 300px;
   }
 `;
 
@@ -133,6 +158,7 @@ const ReserveTime = styled.div`
   transition: all 0.2s ease-in-out;
   background: ${(props) => (props.$active ? '#74bb34' : 'white')};
   cursor: pointer;
+  animation: fade-in-1 0.5s;
 
   &:hover {
     background: ${(props) => (props.$active ? '#74bb34' : '#eee')};
@@ -151,6 +177,8 @@ const ErrorMessage = styled.span`
 `;
 
 export default function Reserve() {
+  const { user, setUser } = useContext(AuthContext);
+  const [isShowModal, setIsShowModal] = useState(false);
   const [entryTime, setEntryTime] = useState('');
   const [availableTime, setAvailableTime] = useState(() => initAvailableTime());
   const [date, setDate] = useState(() => getToday());
@@ -159,6 +187,7 @@ export default function Reserve() {
   const [amount, setAmount] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [value, onChange] = useState(new Date());
+  const history = useHistory();
 
   const handleClickDay = (value) => {
     const dateArray = value.toDateString().split(' ');
@@ -166,18 +195,7 @@ export default function Reserve() {
     setDate(date);
     setEntryTime('');
     getReserve(date).then((res) => {
-      const reservedTime = res.map((reserveData) => reserveData.entryTime);
-      if (reservedTime.length === 0)
-        return setAvailableTime(initAvailableTime());
-      const newAvailableTime = [...availableTime];
-      reservedTime.forEach((index) => {
-        newAvailableTime[index] = {
-          ...newAvailableTime[index],
-          isAvailable: false,
-        };
-      });
-
-      setAvailableTime(newAvailableTime);
+      setAvailableTime(getAvailableTime(res));
     });
   };
 
@@ -187,45 +205,31 @@ export default function Reserve() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isPhoneValid(phone)) return setErrorMessage('請輸入正確的電話號碼');
     if (!entryTime) {
       setErrorMessage('還沒選擇時段喔！');
       return;
     }
+    setIsShowModal(true);
     setErrorMessage('');
-    console.log('submit', { date, entryTime, name, phone, amount });
-    addReserve({ date, entryTime, name, phone, amount }).then((res) => {
-      console.log(res);
-      getReserve(date).then((res) => {
-        const reservedTime = res.map((reserveData) => reserveData.entryTime);
-        if (reservedTime.length === 0)
-          return setAvailableTime(initAvailableTime());
-        const newAvailableTime = [...availableTime];
-        reservedTime.forEach((index) => {
-          newAvailableTime[index] = {
-            ...newAvailableTime[index],
-            isAvailable: false,
-          };
+    addReserve({ date, entryTime, name, phone, amount, username: user }).then(
+      () => {
+        getReserve(date).then((res) => {
+          setAvailableTime(getAvailableTime(res));
         });
-
-        setAvailableTime(newAvailableTime);
-      });
-    });
+      }
+    );
   };
 
   useEffect(() => {
     getReserve(date).then((res) => {
-      const reservedTime = res.map((reserveData) => reserveData.entryTime);
-      if (reservedTime.length === 0) return;
-      const newAvailableTime = [...availableTime];
-      reservedTime.forEach((index) => {
-        newAvailableTime[index] = {
-          ...newAvailableTime[index],
-          isAvailable: false,
-        };
-      });
-      setAvailableTime(newAvailableTime);
+      setAvailableTime(getAvailableTime(res));
     });
   }, []);
+
+  const handleCloseModal = () => {
+    setIsShowModal(false);
+  };
 
   return (
     <Root>
@@ -252,10 +256,10 @@ export default function Reserve() {
                 required
               />
             </InputContainer>
-            <div>
+            <InputContainer>
               <Button>送出</Button>
               {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-            </div>
+            </InputContainer>
           </form>
           <Calendar
             onChange={onChange}
@@ -272,7 +276,7 @@ export default function Reserve() {
               (data, index) =>
                 data.isAvailable && (
                   <ReserveTime
-                    $active={data.time === entryTime}
+                    $active={data.index === entryTime}
                     onClick={() => handleClickTime(data.index)}
                     key={index}
                   >
@@ -283,6 +287,11 @@ export default function Reserve() {
           </TimeContainer>
         </Bottomcontainer>
       </Container>
+      <Modal
+        message="訂位成功"
+        isShowModal={isShowModal}
+        closeModal={handleCloseModal}
+      />
     </Root>
   );
 }
