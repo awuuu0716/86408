@@ -1,6 +1,6 @@
 import { getAuthToken } from './utils';
-// const BASE_URL = 'https://ancient-sea-54746.herokuapp.com';
-const BASE_URL = 'http://localhost:4000';
+const BASE_URL = 'https://ancient-sea-54746.herokuapp.com';
+// const BASE_URL = 'http://localhost:4000';
 
 // products
 export const getProducts = (type) => {
