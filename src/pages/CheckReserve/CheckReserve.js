@@ -86,7 +86,7 @@ const EntryTimeArray = [
 ];
 
 export default function CheckReserve() {
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [reserves, setReserve] = useState([]);
 

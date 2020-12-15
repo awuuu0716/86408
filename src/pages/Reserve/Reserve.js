@@ -177,7 +177,7 @@ const ErrorMessage = styled.span`
 `;
 
 export default function Reserve() {
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [isShowModal, setIsShowModal] = useState(false);
   const [entryTime, setEntryTime] = useState('');
   const [availableTime, setAvailableTime] = useState(() => initAvailableTime());
@@ -194,9 +194,6 @@ export default function Reserve() {
     const date = `${dateArray[1]} ${dateArray[2]} ${dateArray[3]}`;
     setDate(date);
     setEntryTime('');
-    getReserve(date).then((res) => {
-      setAvailableTime(getAvailableTime(res));
-    });
   };
 
   const handleClickTime = (timeIndex) => {
@@ -234,7 +231,7 @@ export default function Reserve() {
     getReserve(date).then((res) => {
       setAvailableTime(getAvailableTime(res));
     });
-  }, []);
+  }, [date]);
 
   const handleCloseModal = () => {
     setIsShowModal(false);

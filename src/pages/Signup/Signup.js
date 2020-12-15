@@ -12,7 +12,7 @@ const Root = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: calc(100vh - 228px);
+  min-height: calc(100vh - 100px);
   background: #fefff8;
   padding-top: 20px;
 `;
