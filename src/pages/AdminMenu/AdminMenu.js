@@ -23,9 +23,10 @@ const Root = styled.div`
 `;
 
 const Container = styled.div`
-  position:relative;
+  position: relative;
   display: flex;
   flex-direction: column;
+  padding: 20px;
   margin-bottom: 30px;
   background: white;
   color: #333;
@@ -33,26 +34,24 @@ const Container = styled.div`
 
   @media ${device.mobileS} {
     border-radius: 0;
-    padding: 0;
     width: 100%;
   }
 
   @media ${device.laptop} {
     border-radius: 10px;
     width: 85%;
-    padding: 20px;
   }
+
   @media ${device.laptopL} {
-    border-radius: 10px;
     width: 60%;
-    padding: 20px;
   }
 `;
 
 const InputContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 50px 0;
+  margin: 30px 0;
+  margin-right: 20px;
 `;
 
 const InputLabel = styled.label`
@@ -90,6 +89,10 @@ const Button = styled.button`
     width: 160px;
     font-size: 24px;
   }
+
+  & + & {
+    margin-left: 20px;
+  }
 `;
 
 const EditButton = styled(HashLink)`
@@ -105,9 +108,12 @@ const EditButton = styled(HashLink)`
   color: #333;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
+  margin-right: 20px;
 
   &:hover {
+    color: #333;
     background: #eee;
+    text-decoration: none;
   }
 
   @media ${device.mobileS} {
@@ -122,12 +128,9 @@ const EditButton = styled(HashLink)`
 `;
 
 const ProductData = styled.div`
-  width: 490px;
-  margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 `;
 
 const UploadImg = styled.input`
@@ -163,9 +166,9 @@ const Desc = styled.div`
 
 const Options = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  width: 400px;
-  margin-top: 30px;
+  margin: 0 auto;
 `;
 
 const ErrorMessage = styled.span`
@@ -174,7 +177,7 @@ const ErrorMessage = styled.span`
 `;
 
 const Select = styled.select`
-  width: 205px;
+  width: 183px;
 `;
 
 const OptionContainer = styled.div`
@@ -200,6 +203,31 @@ const Form = styled.form`
   width: 100%;
   display: flex;
   justify-content: center;
+`;
+
+const Product = styled.div`
+  position: relative;
+  display: flex;
+  padding: 20px;
+  margin-bottom: 30px;
+  justify-content: space-between;
+  background: white;
+  color: #333;
+  box-shadow: 3px 3px 4px #ccc;
+
+  @media ${device.mobileS} {
+    border-radius: 0;
+    width: 100%;
+  }
+
+  @media ${device.laptop} {
+    border-radius: 10px;
+    width: 85%;
+  }
+
+  @media ${device.laptopL} {
+    width: 60%;
+  }
 `;
 
 export default function AdminMenu() {
@@ -246,6 +274,14 @@ export default function AdminMenu() {
     });
   };
 
+  const handleQuitEdit = () => {
+    setInputmode('add');
+    setEditId('');
+    setProductName('');
+    setDescription('');
+    setPrice('');
+  };
+
   const handleEditProduct = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -259,17 +295,10 @@ export default function AdminMenu() {
     })
       .then((data) => {
         setIsLoading(false);
+        handleQuitEdit();
         getProducts(filter).then((data) => setProducts(data));
       })
       .catch((err) => console.log(err));
-  };
-
-  const handleQuitEdit = () => {
-    setInputmode('add');
-    setEditId('');
-    setProductName('');
-    setDescription('');
-    setPrice('');
   };
 
   const addDataToEdit = (id) => {
@@ -362,28 +391,26 @@ export default function AdminMenu() {
       </OptionContainer>
 
       {products.map((product) => (
-        <Container key={product.id}>
-          <div>
-            <ProductContainer>
-              <ProductImg src={product.url} />
-              <DescContainer>
-                <h1>{product.name}</h1>
-                <Desc>{product.type}</Desc>
-                <Desc>NT$ {product.price}</Desc>
-                <Desc>{product.desc}</Desc>
-              </DescContainer>
-            </ProductContainer>
-            <Options>
-              <EditButton
-                to={`${pathname}#input`}
-                onClick={() => addDataToEdit(product.id)}
-              >
-                編輯
-              </EditButton>
-              <Button onClick={() => handleDelete(product.id)}>刪除</Button>
-            </Options>
-          </div>
-        </Container>
+        <Product key={product.id}>
+          <ProductContainer>
+            <ProductImg src={product.url} />
+            <DescContainer>
+              <h1>{product.name}</h1>
+              <Desc>{product.type}</Desc>
+              <Desc>NT$ {product.price}</Desc>
+              <Desc>{product.desc}</Desc>
+            </DescContainer>
+          </ProductContainer>
+          <Options>
+            <EditButton
+              to={`${pathname}#input`}
+              onClick={() => addDataToEdit(product.id)}
+            >
+              編輯
+            </EditButton>
+            <Button onClick={() => handleDelete(product.id)}>刪除</Button>
+          </Options>
+        </Product>
       ))}
     </Root>
   );

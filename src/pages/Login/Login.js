@@ -13,7 +13,7 @@ const Root = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 60vh;
+  min-height: calc(100vh - 228px);
   background: #fefff8;
   padding-top: 20px;
   animation: fade-in 0.5s ease-in-out;
@@ -21,6 +21,7 @@ const Root = styled.div`
 
 const Container = styled.div`
   position: relative;
+
   margin-bottom: 30px;
   background: white;
   color: #333;
@@ -28,20 +29,22 @@ const Container = styled.div`
 
   @media ${device.mobileS} {
     border-radius: 0;
-    padding: 0;
+    padding: 20px;
+    padding-top: 40px;
     width: 100%;
   }
 
   @media ${device.laptop} {
     border-radius: 10px;
     width: 560px;
+    padding: 50px;
   }
 `;
 
 const InputContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 50px 0;
+  margin-bottom: 30px;
 `;
 
 const InputLabel = styled.label`
@@ -100,6 +103,8 @@ const SignUpButton = styled(Link)`
 
   &:hover {
     background: #eee;
+    text-decoration: none;
+    color: #333;
   }
 
   & + & {
@@ -118,9 +123,11 @@ const SignUpButton = styled(Link)`
 `;
 
 const ErrorMessage = styled.div`
-  position: absolute;
-  top: 56%;
-  left: 42%;
+  height: 20px;
+  display: ${(props) => (props.$isShow ? 'flex' : 'hidden')};
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
   color: red;
 `;
 
@@ -143,6 +150,7 @@ export default function Login() {
     login(username, password).then((data) => {
       if (data.ok === 0) {
         setErrorMessage(data.message);
+        setIsLoading(false);
         isSubmit.current = false;
         return;
       }
@@ -172,6 +180,7 @@ export default function Login() {
               required
             />
           </InputContainer>
+
           <InputContainer>
             <InputLabel>密碼</InputLabel>
             <Input
@@ -181,7 +190,9 @@ export default function Login() {
               required
             />
           </InputContainer>
-          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+
+          <ErrorMessage $isShow={errorMessage}>{errorMessage}</ErrorMessage>
+
           <InputContainer>
             <Button type="submit">登入</Button>
             <SignUpButton to="signup">註冊</SignUpButton>

@@ -12,7 +12,7 @@ const Root = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 60vh;
+  min-height: calc(100vh - 228px);
   background: #fefff8;
   padding-top: 20px;
 `;
@@ -20,26 +20,28 @@ const Root = styled.div`
 const Container = styled.div`
   margin-bottom: 30px;
   background: white;
+  padding: 50px;
   color: #333;
   box-shadow: 3px 3px 4px #ccc;
 
   @media ${device.mobileS} {
+    padding: 20px;
+    padding-top:40px;
     border-radius: 0;
-    padding: 0;
     width: 100%;
   }
 
   @media ${device.laptop} {
     border-radius: 10px;
     width: 560px;
+    padding: 50px;
   }
 `;
 
 const InputContainer = styled.div`
-  position: relative;
   display: flex;
   justify-content: center;
-  margin: 50px 0;
+  margin-bottom: 30px;
 `;
 
 const InputLabel = styled.label`
@@ -74,7 +76,7 @@ const Button = styled.button`
   }
 
   @media ${device.mobileS} {
-    width: 80px;
+    width: 100px;
     font-size: 16px;
   }
 
@@ -85,8 +87,11 @@ const Button = styled.button`
 `;
 
 const ErrorMessage = styled.div`
-  position: absolute;
-  top: 36px;
+  height: 20px;
+  display: ${(props) => (props.$isShow ? 'flex' : 'hidden')};
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
   color: red;
 `;
 
@@ -160,9 +165,8 @@ export default function Signup() {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
-            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           </InputContainer>
-
+          <ErrorMessage $isShow={errorMessage}>{errorMessage}</ErrorMessage>
           <InputContainer>
             <Button>送出</Button>
           </InputContainer>

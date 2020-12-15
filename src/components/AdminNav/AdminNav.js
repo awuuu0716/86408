@@ -35,6 +35,8 @@ const Button = styled(Link)`
 
   &:hover {
     background: #eee;
+    color: #333;
+    text-decoration: none;
   }
 
   @media ${device.mobileS} {

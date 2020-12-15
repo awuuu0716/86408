@@ -1,8 +1,7 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { device } from '../../constants/devices';
 import Calendar from 'react-calendar';
-import { useHistory } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import { addReserve, getReserve } from '../../WebAPI';
 import Modal from '../../components/Modal';
@@ -30,6 +29,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
+  min-height: 626px;
   background: white;
 
   color: #333;
@@ -187,6 +187,7 @@ export default function Reserve() {
   const [amount, setAmount] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [value, onChange] = useState(new Date());
+  const allowSubmit = useRef(true);
 
   const handleClickDay = (value) => {
     const dateArray = value.toDateString().split(' ');
@@ -205,16 +206,25 @@ export default function Reserve() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isPhoneValid(phone)) return setErrorMessage('請輸入正確的電話號碼');
-    if (entryTime==='') {
+    if (entryTime === '') {
       setErrorMessage('還沒選擇時段喔！');
       return;
     }
+    if (!allowSubmit.current) return;
+    allowSubmit.current = false;
     setIsShowModal(true);
     setErrorMessage('');
+
     addReserve({ date, entryTime, name, phone, amount, username: user }).then(
-      () => {
+      (res) => {
+        if (res.ok !== 1) return setErrorMessage(res.message);
         getReserve(date).then((res) => {
           setAvailableTime(getAvailableTime(res));
+          allowSubmit.current = true;
+          setEntryTime('');
+          setName('');
+          setPhone('');
+          setAmount('');
         });
       }
     );
@@ -237,12 +247,17 @@ export default function Reserve() {
           <form onSubmit={handleSubmit}>
             <InputContainer>
               <InputLabel>姓名</InputLabel>
-              <Input onChange={(e) => setName(e.target.value)} required />
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </InputContainer>
             <InputContainer>
               <InputLabel>電話</InputLabel>
               <Input
                 type="number"
+                value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required
               />
@@ -251,6 +266,7 @@ export default function Reserve() {
               <InputLabel>人數</InputLabel>
               <Input
                 type="number"
+                value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
               />

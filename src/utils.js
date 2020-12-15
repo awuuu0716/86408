@@ -35,31 +35,6 @@ export const getAvailableTime = (reserveData) => {
   return newAvailableTime;
 };
 
-export const sendAuthMail = ({ userMail, userName, auth }) => {
-  const BASE_URL = '';
-  const templateParams = {
-    userName,
-    reply_to: userMail,
-    authUrl: `${BASE_URL}/${auth}`,
-  };
-
-  emailjs
-    .send(
-      'service_udskj8h',
-      'template_lv3satt',
-      templateParams,
-      'user_7jLZ5Jx2RtS7C0vwzfUge'
-    )
-    .then(
-      (response) => {
-        console.log('SUCCESS!', response.status, response.text);
-      },
-      (err) => {
-        console.log('FAILED...', err);
-      }
-    );
-};
-
 export const isPhoneValid = (phone) => {
   const rule = /^09[\d]{8}$/;
   return rule.test(phone.toString());

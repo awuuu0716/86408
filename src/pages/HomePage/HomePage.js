@@ -102,10 +102,11 @@ const Action = styled(Link)`
   color: #3e613d;
   border-radius: 10px;
   transition: transform 0.5s;
-  text-decoration: none;
   cursor: pointer;
 
   &:hover {
+    color: #3e613d;
+    text-decoration: none;
     transform: scale(1.1);
   }
 
